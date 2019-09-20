@@ -20,7 +20,11 @@ Including another URLconf
 #from django.contrib import admin
 #from django.urls import path
 
+from django.conf.urls import include, url
+import Project3App2.views
 urlpatterns = [
     # Uncomment the next line to enable the admin:
     #path('admin/', admin.site.urls)
+    url(r'^$', Project3App2.views.index, name='index'),
+    url(r'^home$', Project3App2.views.index, name='home'),
 ]
