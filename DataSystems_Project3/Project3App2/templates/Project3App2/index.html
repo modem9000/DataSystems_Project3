@@ -1,8 +1,11 @@
+{#This is the markup template for the index page.#}
 <html>
     <head>
         <title>{{title}}</title>
+        {% load staticfiles %} <!--Instructs django to load static files-->
+        <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
     </head>
     <body>
-        <strong>{{message}}</strong>{{ content }}
+        <span class="message">{{message}}</span>{{ content }}
     </body>
 </html>

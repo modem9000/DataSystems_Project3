@@ -44,6 +44,7 @@
     <Compile Include="Project3App2\__init__.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Project3App2\static\site.css" />
     <Content Include="Project3App2\templates\Project3App2\index.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
@@ -51,6 +52,7 @@
     <Folder Include="DataSystems_Project3\" />
     <Folder Include="Project3App2\" />
     <Folder Include="Project3App2\migrations\" />
+    <Folder Include="Project3App2\static\" />
     <Folder Include="Project3App2\templates\" />
     <Folder Include="Project3App2\templates\Project3App2\" />
   </ItemGroup>
