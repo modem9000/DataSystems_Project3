@@ -46,6 +46,7 @@
   <ItemGroup>
     <Content Include="Project3App2\static\site.css" />
     <Content Include="Project3App2\templates\Project3App2\index.html" />
+    <Content Include="Project3App2\templates\Project3App2\Login.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -27,4 +27,5 @@ urlpatterns = [
     #path('admin/', admin.site.urls)
     url(r'^$', Project3App2.views.index, name='index'),
     url(r'^home$', Project3App2.views.index, name='home'),
+    url(r'^login$', Project3App2.views.login, name='login'),
 ]

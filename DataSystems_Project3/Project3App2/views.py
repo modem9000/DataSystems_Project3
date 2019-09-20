@@ -15,4 +15,14 @@ def index(request):
             'message': "The internethmmmm",
             'content': " is: " + now.strftime("%A, %d, %B, %Y at %X")     
         }
-        )
+    )
+
+def login(request):
+    return render(
+        request,
+        "Project3App2/login.html",
+        {
+            'title': "login Project3App2",
+            'content': "Login: \n Password:"
+        }
+    )
