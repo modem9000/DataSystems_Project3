@@ -1,12 +1,5 @@
 {#This is the markup template for the index page.#}
-<html>
-    <head>
-        <title>{{title}}</title>
-        {% load staticfiles %} <!--Instructs django to load static files-->
-        <link rel="stylesheet" type="text/css" href="{% static 'site.css' %}" />
-    </head>
-    <body>
-        <div><a href ="login">login</a></div>
-        <span class="message">{{message}}</span>{{ content }}
-    </body>
-</html>
+{% extends "Project3App2/Tutorlayout.html" %}
+{% block content %}
+<span class="message">{{message}}</span>{{ content }}
+{% endblock %}
