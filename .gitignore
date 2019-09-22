@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /DataSystems_Project3/env
+/TutorBookingSystem/env
