@@ -7,6 +7,8 @@ from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from app import forms, views
+from django.conf.urls import include
+from django.contrib import admin
 
 
 urlpatterns = [
@@ -26,6 +28,7 @@ urlpatterns = [
          ),
          name='login'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path(r'^admin.doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
 ]
 
