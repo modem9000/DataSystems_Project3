@@ -9,6 +9,7 @@ class Poll(models.Model):
     """A poll object for use in the application views and repository."""
     text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
+    author = models.CharField(max_length=100, blank=True)
 
     def total_votes(self):
         """Calculates the total number of votes for this poll."""
