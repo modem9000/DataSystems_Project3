@@ -3,7 +3,7 @@ Customizations for the Django administration interface.
 """
 
 from django.contrib import admin
-from app.models import Choice, Poll
+from app.models import Choice, Poll, Student, Tutor, Quiz
 
 class ChoiceInline(admin.TabularInline):
     """Choice objects can be edited inline in the Poll editor."""
@@ -23,3 +23,7 @@ class PollAdmin(admin.ModelAdmin):
     date_hierarchy = 'pub_date'
 
 admin.site.register(Poll, PollAdmin)
+admin.site.register(Student)
+admin.site.register(Tutor)
+admin.site.register(Quiz)
+

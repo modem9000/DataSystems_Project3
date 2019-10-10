@@ -8,11 +8,12 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpRequest, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from app.models import Choice, Poll
-
+from django.contrib.auth.forms import UserCreationForm
+from app.forms import RegistrationForm
 
 class PollListView(ListView):
     """Renders the home page, with a list of all polls."""
@@ -108,3 +109,15 @@ def seed(request):
             choice.save()
 
     return HttpResponseRedirect(reverse('app:home'))
+
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/index')
+    else:
+        form = RegistrationForm()
+
+        args = {'form': form}
+        return render(request, 'app/register.html', args)
