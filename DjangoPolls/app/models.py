@@ -58,7 +58,7 @@ class Tutor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=26, default='')
     last_name = models.CharField(max_length=26, default='')
-    email = models.CharField(max_length=50, default='')
+    email = models.EmailField(max_length=100, default='')
     creation_date = models.DateTimeField(default=timezone.now)
 
     def create(self):
@@ -68,21 +68,35 @@ class Tutor(models.Model):
     def  __str__(self):
         return self.first_name
 
+class Session(models.Model):
+    tutor = models.ManyToManyField(User)
+    student = models.ManyToManyField(Student)
+    session_choice = (
+        ('I', 'Individual'),
+        ('G', 'Group'),
+    )
+    date = models.DateTimeField(default = timezone.now)
+    size = models.IntegerField(default = 1)
+
+    
+
 class Quiz(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    Session = models.ManyToManyField(Session)
     name = models.CharField(max_length=26, default='')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     creation_date = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField(default=timezone.now)
 
+
 class Question(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    quiz = models.ManyToManyField(Quiz)
     question = models.TextField()
 
 
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.CharField(max_length=200, default='')
     correct = models.BooleanField(default=False)
+    question = models.ManyToManyField(Question)
 
 def create_profile(sender, **kwargs):
     if kwargs['created']:

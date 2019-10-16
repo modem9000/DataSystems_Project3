@@ -10,10 +10,10 @@ from django.urls import reverse
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 from app.models import Choice, Poll
 from django.contrib.auth.forms import UserCreationForm
-from app.forms import RegistrationForm
+from app.forms import RegistrationForm, CreateQuizForm, CreateQuestionForm, CreateAnswerForm
 
 class PollListView(ListView):
     """Renders the home page, with a list of all polls."""
@@ -115,9 +115,67 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/index')
+            return redirect('/about')
     else:
         form = RegistrationForm()
 
         args = {'form': form}
         return render(request, 'app/register.html', args)
+
+class CreateQuiz(TemplateView):
+    template_name = 'app/tutor.html'
+
+    def get(self, request):
+        form = CreateQuizForm()
+        return render(request, self.template_name, {
+            'form': form,
+            'title': 'Create Quiz',
+            })
+
+    def post(self, request):
+        form = CreateQuizForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('/questions')
+
+        args = {'form': form,}
+        return render(request, self.template_name, args)
+
+class CreateQuestions(TemplateView):
+    template_name = 'app/tutor.html'
+
+    def get(self, request):
+        form = CreateQuestionForm
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = CreateQuestionForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('/answers')
+
+        args = {'form': form,}
+        return render(request, self.template_name, args)
+
+class CreateAnswers(TemplateView):
+    template_name = 'app/tutor.html'
+
+    def get(self, request):
+        form = CreateAnswerForm
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = CreateAnswerForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('/about')
+
+        args = {'form': form,}
+        return render(request, self.template_name, args)
+            
