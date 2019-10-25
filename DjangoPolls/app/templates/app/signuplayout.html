@@ -1,0 +1,11 @@
+﻿{% extends "app/layout.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Sign Up</h1>
+        <a href="{% url 'studentsignup' %}">Student</a>
+        <a href="{% url 'tutorsignup' %}">Tutor</a>
+    </div>
+
+{% endblock %}

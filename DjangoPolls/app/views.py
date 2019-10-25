@@ -11,9 +11,9 @@ from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, TemplateView
-from app.models import Choice, Poll
+from app.models import Choice, Poll, Session, Quiz, Question
 from django.contrib.auth.forms import UserCreationForm
-from app.forms import RegistrationForm, CreateQuizForm, CreateQuestionForm, CreateAnswerForm
+from app.forms import RegistrationForm, CreateQuizForm, CreateQuestionForm, CreateSessionForm#, TutorSignUpForm, StudentSignUpForm
 
 class PollListView(ListView):
     """Renders the home page, with a list of all polls."""
@@ -115,23 +115,130 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/about')
+            args = {
+                'title':'Sign Up Selection',
+                'year':datetime.now().year,
+                }
+            return render(request, app/about.html, args)
     else:
         form = RegistrationForm()
 
         args = {'form': form}
         return render(request, 'app/register.html', args)
 
+def signup(request):
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/signuplayout.html',
+        {
+            'title':'Sign Up Selection',
+            'year':datetime.now().year,
+        }
+    )
+
+class TutorSignUp(TemplateView):
+    template_name = 'app/register.html'
+
+    def get(self, request):
+        form = TutorSignUpForm()
+        return render(request, self.template_name, {
+            'form': form,
+            'title': 'Select Classes',
+            })
+
+    def post(self, request):
+        form = TutorSignUpForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('/setquiz')
+
+        args = {'form': form,}
+        return render(request, self.template_name, args)
+
+class StudentSignUp(TemplateView):
+    template_name = 'app/register.html'
+
+    def get(self, request):
+        form = StudentSignUpForm()
+        return render(request, self.template_name, {
+            'form': form,
+            'title': 'Select ',
+            })
+
+    def post(self, request):
+        form = StudentSignUpForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('/studenthome')
+
+        args = {'form': form,}
+        return render(request, self.template_name, args)
+
+@login_required
+def tutorhome(request):
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/tutorlayout.html',
+        {
+            'title':'Tutor Home Page',
+            'year':datetime.now().year,
+        }
+    )
+
+@login_required
+def studenthome(request):
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/studentlayout.html',
+        {
+            'title':'Student Home Page',
+            'year':datetime.now().year,
+        }
+    )
+
+class CreateSession(TemplateView):
+    template_name = 'app/tutor.html'
+
+    @login_required
+    def get(self, request):
+        form = CreateSessionForm()
+        return render(request, self.template_name, {
+            'form': form,
+            'title': 'Create Session',
+            })
+
+    @login_required
+    def post(self, request):
+        form = CreateSessionForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect('/setquiz')
+
+        args = {'form': form,}
+        return render(request, self.template_name, args)
+
 class CreateQuiz(TemplateView):
     template_name = 'app/tutor.html'
 
+    @login_required
     def get(self, request):
         form = CreateQuizForm()
+        sessions = Session.objects.all()
         return render(request, self.template_name, {
             'form': form,
             'title': 'Create Quiz',
             })
 
+    @login_required
     def post(self, request):
         form = CreateQuizForm(request.POST)
         if form.is_valid():
@@ -146,10 +253,12 @@ class CreateQuiz(TemplateView):
 class CreateQuestions(TemplateView):
     template_name = 'app/tutor.html'
 
+    @login_required
     def get(self, request):
         form = CreateQuestionForm
         return render(request, self.template_name, {'form': form})
 
+    @login_required
     def post(self, request):
         form = CreateQuestionForm(request.POST)
         if form.is_valid():
@@ -157,24 +266,6 @@ class CreateQuestions(TemplateView):
             post.user = request.user
             post.save()
             return redirect('/answers')
-
-        args = {'form': form,}
-        return render(request, self.template_name, args)
-
-class CreateAnswers(TemplateView):
-    template_name = 'app/tutor.html'
-
-    def get(self, request):
-        form = CreateAnswerForm
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request):
-        form = CreateAnswerForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user
-            post.save()
-            return redirect('/about')
 
         args = {'form': form,}
         return render(request, self.template_name, args)

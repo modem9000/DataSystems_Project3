@@ -7,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from app.models import Quiz, Question, Answer
+from app.models import Quiz, Question, Session
 from django.utils import timezone
 
 class BootstrapAuthenticationForm(AuthenticationForm):
@@ -43,14 +43,32 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
 
+#class TutorSignUpForm(forms.ModelForm):
+
+
+#class StudentSignUpForm(forms.ModelForm):
+
+class CreateSessionForm(forms.ModelForm):
+   # session_type = forms.ChoiceField(choices = Session.session_choices)
+   date = forms.DateTimeField()
+   size = forms.IntegerField()
+   class Meta:
+       model = Session
+       fields = ('session_choice',
+                 'date',
+                 'size',
+                 )
+
 class CreateQuizForm(forms.ModelForm):
+    session = forms.ModelChoiceField(queryset=Session.objects.all())
     name = forms.CharField(max_length=26, required=True)
     creation_date = forms.DateTimeField()
     due_date = forms.DateTimeField()
 
     class Meta:
         model = Quiz
-        fields = ('name',
+        fields = ('session',
+                  'name',
                   'creation_date',
                   'due_date'
                   )
@@ -64,18 +82,14 @@ class CreateQuestionForm(forms.ModelForm):
         model = Question
         fields = ('quiz',
                   'question',
-                  )
-
-class CreateAnswerForm(forms.ModelForm):
-    question = forms.CharField(max_length=26, required=True)
-    answer = forms.CharField(max_length=26, required=True)
-    correct = forms.BooleanField()
-
-    class Meta:
-        model = Answer
-        fields = ('question',
-                  'answer',
-                  'correct'
+                  'answer1',
+                  'correct1',
+                  'answer2',
+                  'correct2',
+                  'answer3',
+                  'correct3',
+                  'answer4',
+                  'correct4'
                   )
 
 

@@ -65,6 +65,7 @@
     <Content Include="app\templates\app\studentlayout.html" />
     <Content Include="app\templates\app\tutor.html" />
     <Content Include="app\templates\app\tutorlayout.html" />
+    <Content Include="app\templates\app\signuplayout.html" />
     <Content Include="db.sqlite3" />
     <Content Include="requirements.txt" />
     <Content Include="app\samples.json" />

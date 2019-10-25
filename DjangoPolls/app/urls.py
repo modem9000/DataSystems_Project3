@@ -3,7 +3,7 @@ Definition of urls for polls viewing and voting.
 """
 
 from django.urls import path
-from app.models import Poll, Question, Answer
+from app.models import Poll, Question
 import app.views
 
 urlpatterns = [
@@ -30,12 +30,12 @@ urlpatterns = [
     # poll_id this time, which becomes an argument passed to the view.
     path('<int:poll_id>/vote/', app.views.vote, name='vote'),
     path('seed', app.views.seed, name='seed'),
-    path('<int:quiz_id>/createQuestions/',
-    app.views.CreateQuestions.as_view(
-        template_name='app/tutor.html'),
-    name='createquestions'),
-    path('<int:qk>/createanswers',
-    app.views.CreateAnswers.as_view(
-        template_name='app/tutor.html'),
-    name='createanswers'),
+    #path('<int:quiz_id>/createquestions/',
+    #app.views.CreateQuestions.as_view(
+    #    template_name='app/tutor.html'),
+    #name='createquestions'),
+    #path('<int:qk>/createanswers',
+    #app.views.CreateAnswers.as_view(
+    #    template_name='app/tutor.html'),
+    #name='createanswers'),
 ]

@@ -59,8 +59,19 @@ class Tutor(models.Model):
     first_name = models.CharField(max_length=26, default='')
     last_name = models.CharField(max_length=26, default='')
     email = models.EmailField(max_length=100, default='')
-    creation_date = models.DateTimeField(default=timezone.now)
+    subject_choices = [
+    ('ENG', 'English'),
+    ('MAT', 'Math'),
+    ('SCI', 'Science'),
+    ('ENGMAT', 'English/Math'),
+    ('ENGSCI', 'English/Science'),
+    ('MATSCI', 'Math/Science'),
+    ('ENGMATSCI', 'English/Math/Science'),
 
+    ]
+    subject_choice = models.CharField(max_length=9, choices = subject_choices, default='None')
+    creation_date = models.DateTimeField(default=timezone.now)
+    
     def create(self):
         self.creation_date = timezone.now
         self.save
@@ -71,17 +82,18 @@ class Tutor(models.Model):
 class Session(models.Model):
     tutor = models.ManyToManyField(User)
     student = models.ManyToManyField(Student)
-    session_choice = (
+    session_choices = [
         ('I', 'Individual'),
         ('G', 'Group'),
-    )
+        ]
+    session_choice = models.CharField(max_length=2, choices = session_choices, default='individual')
     date = models.DateTimeField(default = timezone.now)
     size = models.IntegerField(default = 1)
 
     
 
 class Quiz(models.Model):
-    Session = models.ManyToManyField(Session)
+    session = models.ManyToManyField(Session)
     name = models.CharField(max_length=26, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     creation_date = models.DateTimeField(default=timezone.now)
@@ -90,13 +102,26 @@ class Quiz(models.Model):
 
 class Question(models.Model):
     quiz = models.ManyToManyField(Quiz)
-    question = models.TextField()
+    current_quiz = models.ForeignKey(Quiz, related_name = 'current_quiz', null=True, on_delete=models.CASCADE)
+    question1 = models.TextField()
+    answer1 = models.CharField(max_length=200, default='')
+    correct1 = models.BooleanField(default=False)
+    question2 = models.TextField()
+    answer2 = models.CharField(max_length=200, default='')
+    correct2 = models.BooleanField(default=False)
+    question3 = models.TextField()
+    answer3 = models.CharField(max_length=200, default='')
+    correct3 = models.BooleanField(default=False)
+    question4 = models.TextField()
+    answer4 = models.CharField(max_length=200, default='')
+    correct4 = models.BooleanField(default=False)
 
-
-class Answer(models.Model):
-    answer = models.CharField(max_length=200, default='')
-    correct = models.BooleanField(default=False)
-    question = models.ManyToManyField(Question)
+    @classmethod
+    def question_to_quiz(cls, question, quiz):
+        quiz, created = cls.objects.get_or_create(
+            current_quiz=current_quiz
+        )
+        Question.quiz.add(quiz)
 
 def create_profile(sender, **kwargs):
     if kwargs['created']:

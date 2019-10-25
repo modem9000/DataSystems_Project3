@@ -7,7 +7,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 from app import forms, views
-from app.views import CreateQuiz, CreateQuestions
+from app.views import CreateQuiz, CreateQuestions, CreateSession, TutorSignUp, StudentSignUp
 
 urlpatterns = [
     path('', include(('app.urls', "app"), "appurls")),
@@ -30,5 +30,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', views.register, name='register'),
     path('setquiz/', CreateQuiz.as_view(), name='setquiz'),
-    path('questions/', CreateQuestions.as_view(), name='setquestion')
+    path('questions/', CreateQuestions.as_view(), name='setquestion'),
+    path('sessions/', CreateSession.as_view(), name='setsession'),
+    path('tutorhome/', views.tutorhome, name='tutorhome'),
+    path('studenthome/', views.studenthome, name='studenthome'),
+    path('signup/', views.signup, name='signup'),
+    path('tutorsignup/', TutorSignUp.as_view(), name='tutorsignup'),
+    path('studentsignup/', StudentSignUp.as_view(), name='studentsignup'),
+
 ]
